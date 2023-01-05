@@ -1,0 +1,12 @@
+main
+BEGIN
+{
+    < int a , int
+    open
+        while a + b == b + a
+            open
+                a = a + 1
+
+    close
+}
+END

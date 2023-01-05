@@ -1,0 +1,14 @@
+1. Program -> main begin { < DeclarationBlock > Block  } end
+2. DeclarationBlock -> Declarations
+3. Declarations -> Declarations , Declaration | Declaration
+4. Declaration -> Type Name
+5. Name -> ID
+6. Type -> number | string
+7. Block -> open Instructions close
+8. Instructions -> open Instructions close  open Instruction close | Instruction
+9. Instruction -> Assignment | Block | If | While | Function
+10.Assignment -> ID = Function
+11.Function -> Const + Const | Const * Const | Const - Const  | Const / Const
+13.Const -> ID | CONST
+14.If -> if Function == Function open Instructions close | if Function = Function open Instructions close else open Instructions close
+15.While -> while Function == Function open Instructions close

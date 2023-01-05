@@ -1,0 +1,161 @@
+
+
+import java_cup.runtime.*;
+import java.io.*;
+
+parser code {:
+   public static void main( String[] args )
+   {
+      try
+	  {
+		   FileReader file = new FileReader( args[0] );
+		   Scanner scanner = new MPLexer( file );
+		   MPParser parser = new MPParser( scanner );
+		   parser.parse();
+	  }
+	  catch( Exception e )
+	  {
+          e.printStackTrace();
+		   System.out.println(e);
+	  }
+   }
+
+:};
+
+//Terminal
+terminal PROGRAM, INT, STRING, IF, WHILE,THEN, ID, CONST, PLUS, MULTIPLICATION, MINUS, DIVISION, ASSIGN;
+terminal OZ, ZZ,OV, ZV, VZ, MZ, CLOSE, OPEN, begin, end, EQUALS, ERROR, COMMA, ELSE;
+// VZ > , MZ <
+//Nonterminal
+non terminal program, DeclarationBlock, Declarations, Declaration, Type, Block, Name, Instructions, Instruction, Assign;
+non terminal Function, Const, If, While;
+
+//Grammar
+
+program ::= PROGRAM begin OV MZ DeclarationBlock VZ Block ZV end
+            {:
+                System.out.println("Redukcija po smeni 1 ");
+            :} | PROGRAM begin OV MZ DeclarationBlock VZ Block ZV error
+            {:
+               System.out.println("Nedostaje end na kraju programa ");
+            :}| PROGRAM begin OV MZ DeclarationBlock VZ Block error
+            {:
+              System.out.println("Nedostaje } na kraju programa ");
+            :}| PROGRAM begin OV MZ error
+            {:
+             System.out.println("Nedostaje vz");
+            :} | PROGRAM error
+            {:
+             System.out.println("Nedostaje BEGIN");
+             System.out.close();
+            :} | PROGRAM begin OV MZ DeclarationBlock
+            {:
+                System.out.println("Nedostaje Zatvorena zagrada kod deklaracionog bloka");
+            :};
+
+
+DeclarationBlock ::= Declarations
+            {:
+                System.out.println("Redukcija po smeni 2 ");
+            :};
+Declarations ::= Declarations COMMA Declaration
+            {:
+                System.out.println("Redukcija po smeni 3 ");
+            :} | Declaration
+            {:
+                System.out.println("Redukcija po smeni 4 ");
+            :} | Declarations COMMA error
+            {:
+                System.out.println("Zarezu tu nije mesto");
+            :};
+
+Declaration ::= Type Name
+            {:
+                System.out.println("Redukcija po smeni 5 ");
+            :} | Type error
+            {:
+                System.out.println("Nedostaje Ime promenjive");
+            :};
+Name ::= ID
+            {:
+                System.out.println("Redukcija po smeni 6 ");
+            :};
+Type ::= INT
+            {:
+                System.out.println("Redukcija po smeni 8 ");
+            :} | STRING
+            {:
+                System.out.println("Redukcija po smeni 9 ");
+            :};
+Block ::= OPEN Instructions CLOSE
+            {:
+                System.out.println("Redukcija po smeni 10 ");
+           :};
+Instructions ::= OPEN Instructions CLOSE OPEN Instruction CLOSE
+            {:
+                System.out.println("Redukcija po smeni 11 ");
+            :} | Instruction
+            {:
+                System.out.println("Redukcija po smeni 12 ");
+            :};
+Instruction ::= Assign
+            {:
+                System.out.println("Redukcija po smeni 13 ");
+            :} | Block
+            {:
+                System.out.println("Redukcija po smeni 14 ");
+            :} | If
+            {:
+                System.out.println("Redukcija po smeni 15 ");
+            :} | While
+            {:
+                System.out.println("Redukcija po smeni 16 ");
+            :} | Function
+            {:
+                System.out.println("Redukcija o smeni 17");
+            :};
+Assign ::= Const ASSIGN Function
+            {:
+                System.out.println("Redukcija po smeni 18 ");
+            :} | Const ASSIGN Const
+            {:
+               System.out.println("Redukcija po smeni 19 ");
+            :} | Const error
+            {:
+                System.out.println("Losa dodela");
+            :};
+Function ::= Const PLUS Const
+            {:
+                System.out.println("Redukcija po smeni 20 ");
+            :} | Const MINUS Const
+            {:
+                System.out.println("Redukcija po smeni 21 ");
+            :} | Const MULTIPLICATION Const
+            {:
+                System.out.println("Redukcija po smeni 22 ");
+            :} | Const DIVISION Const
+            {:
+                System.out.println("Redukcija po smeni 23 ");
+            :} | Const EQUALS Const
+            {:
+                System.out.println("Redukcija po smeni 24 ");
+            :};
+Const ::= CONST
+            {:
+                System.out.println("Redukcija po smeni 25 ");
+            :} | ID
+            {:
+                System.out.println("Redukcija po smeni 26 ");
+            :};
+If ::= IF Function EQUALS Function OPEN Instructions CLOSE ELSE OPEN Instructions CLOSE
+            {:
+                System.out.println("Redukcija po smeni 27 ");
+            :} | IF Function EQUALS Function OPEN Instructions CLOSE
+            {:
+                System.out.println("Resukcija po smeni 28");
+            :};
+While ::= WHILE Function EQUALS Function OPEN Instructions CLOSE
+            {:
+                System.out.println("Redukcija po smeni 29 ");
+            :};
+

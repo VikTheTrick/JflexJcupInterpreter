@@ -1,0 +1,19 @@
+main
+BEGIN
+{
+    < string prvi , string drugi, int a, int b >
+    open
+        while a + b == b + a
+            open
+                if prvi + 1 == drugi - 1
+                    open
+                        a = a + 1
+                    close
+                    ELSE
+                         open
+                            b = b - 1
+                         close
+            close
+    close
+}
+END
